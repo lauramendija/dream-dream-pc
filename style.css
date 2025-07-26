@@ -1,0 +1,64 @@
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body, html {
+  margin: 0; padding: 0;
+  height: 300vh;
+  background: #111;
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
+  overscroll-behavior: smooth;
+}
+
+#app {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  background: #222;
+}
+
+main.content {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20vh 20px 40px;
+  z-index: 1;
+  user-select: text;
+  text-align: center;
+  will-change: transform;
+}
+
+h1 {
+  font-weight: 300;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+}
+
+section {
+  margin-top: 80vh;
+  padding: 80px 20px;
+  background: #222;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+html {
+  scroll-behavior: smooth;
+}
