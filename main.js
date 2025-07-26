@@ -62,7 +62,7 @@ scene.add(dust);
 // Dators
 let model;
 const loader = new GLTFLoader();
-loader.load('/pc2.glb', (gltf) => {
+loader.load('pc2.glb', (gltf) => {
   model = gltf.scene;
   model.scale.set(0.8, 0.8, 0.8);
   model.position.set(0, 0.5, 0);
