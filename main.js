@@ -7,6 +7,7 @@ import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
+const isMobile = window.innerWidth < 768;
 gsap.registerPlugin(ScrollTrigger);
 
 const container = document.getElementById('app');
@@ -19,7 +20,7 @@ camera.lookAt(0, 1, 0);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); //performance tweak
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.5; 
@@ -29,7 +30,7 @@ scene.add(new THREE.HemisphereLight(0x9999ff, 0x111122, 1));
 scene.add(new THREE.AmbientLight(0x666677, 0.35));
 
 // Dust particles
-const dustCount = 600;
+const dustCount = isMobile ? 200 : 600;
 const dustGeo = new THREE.BufferGeometry();
 const dustPositions = new Float32Array(dustCount * 3);
 
@@ -65,7 +66,7 @@ const loader = new GLTFLoader();
 loader.load('pc2.glb', (gltf) => {
   model = gltf.scene;
   model.scale.set(0.8, 0.8, 0.8);
-  model.position.set(0, 0.5, 0);
+  model.position.set(0, 1, 0);
   model.rotation.y = Math.PI * 1.2;
   scene.add(model);
 //tests
@@ -104,9 +105,9 @@ function setupScrollAnimation() {
       targetModelYRot = Math.PI * (1.2 - 0.7 * progress);
 
       if (progress > 0.9) {
-        gsap.to(container, { opacity: 0, duration: 0.8 });
+        gsap.to(container, { opacity: 0, duration: 0.3 });
       } else {
-        gsap.to(container, { opacity: 1, duration: 0.8 });
+        gsap.to(container, { opacity: 1, duration: 0.3 });
       }
     }
   });
@@ -141,18 +142,26 @@ window.addEventListener('resize', () => {
 
 
 
-//gsap tekstam
+//gsap main tekstam
 
-gsap.from("main.content h1", {
-  opacity: 0,
-  duration: 1.2,
-  ease: "power2.out",
-  delay: 0.3,
-});
 
-gsap.from("main.content p", {
+gsap.from(["main.content h1", "main.content p"], {
   opacity: 0,
-  duration: 1,
+  duration: 0.3,
   ease: "power2.out",
-  delay: 0.6,
+  delay: 0.2,
+  stagger: 0.3, // atšķirība starp virsrakstu un apakštekstu
+  onComplete: () => {
+    // Scroll fade out for both elements together
+    gsap.to(["main.content h1", "main.content p"], {
+      opacity: 0,
+      scrollTrigger: {
+        trigger: "main.content h1",  // trigger once on h1, affects both
+        start: "top 35%",
+        end: "bottom 1%",
+        scrub: true,
+       // markers: true,
+      }
+    });
+  }
 });
